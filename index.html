@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raul Covisa - Diseñador Gráfico/Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #f0f0f0;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.5s; /* Transición suave para el cambio de color */
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt.png'); /* Textura de granulado */
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4em;
+            margin: 0;
+            letter-spacing: -2px;
+        }
+        h2 {
+            font-weight: 300;
+            font-size: 1.5em;
+            margin: 10px 0 60px;
+            color: #ffffff;
+        }
+        .portfolio-categories {
+            list-style-type: none;
+            padding: 0;
+            width: calc(100% - 340px); /* Ajuste del ancho para dejar espacio a la sección de imágenes */
+            max-width: 800px; /* Ancho máximo para centrar más */
+            margin-left: auto; /* Empuja el contenedor a la derecha */
+            margin-right: auto; /* Centra horizontalmente */
+        }
+        .category {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .projects {
+            max-height: 0; /* Inicialmente oculto */
+            overflow: hidden; /* Oculta el contenido desbordado */
+            transition: max-height 0.5s ease; /* Transición suave */
+        }
+        .project {
+            font-size: 1em; /* Tamaño de fuente para los proyectos */
+            margin-left: 20px; /* Espaciado a la izquierda */
+            opacity: 0; /* Inicialmente oculto */
+            transform: translateX(-20px); /* Desplazamiento inicial */
+        }
+        a {
+            color: inherit; /* Hereda el color del texto */
+            text-decoration: none; /* Elimina el subrayado */
+        }
+        .vote-section {
+            margin-top: 40px; /* Espacio superior para la sección de votación */
+        }
+        button {
+            padding: 10px 20px; /* Aumenta el tamaño del botón */
+            font-size: 1.2em; /* Tamaño de fuente más grande */
+            border-radius: 12px; /* Bordes redondeados */
+            border: none; /* Sin borde predeterminado */
+            background-color: #4CAF50; /* Color de fondo verde */
+            color: white; /* Color del texto en blanco */
+            cursor: pointer; /* Cambia el cursor al pasar por encima */
+            transition: background-color 0.3s ease; /* Transición suave para el cambio de color de fondo */
+        }
+        button:hover {
+            background-color: #45a049; /* Color más oscuro al pasar el mouse sobre el botón */
+        }
+    </style>
+</head>
+<body>
+    <h1>Raul Covisa</h1>
+    <h2>Diseñador Gráfico/Web</h2>
+    <ul class="portfolio-categories">
+        <li class="category" data-category="grafico">
+            Diseño Gráfico
+            <ul class="projects">
+                <li class="project">
+                    <a href="./proyecto1.html">Branding para CaféAroma</a>
+                </li>
+                <li class="project">
+                    <a href="https://www.tu-proyecto.com">Branding para Uniqlo</a>
+                </li>
+                <li class="project">
+                    <a href="https://www.tu-proyecto.com">Branding Vicio</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="category" data-category="web">
+            Diseño Web
+            <ul class="projects">
+                <li class="project">Rediseño web para FinanceHub</li>
+                <li class="project">Landing page para StartUp X</li>
+                <li class="project">Interfaz para app móvil FitTrack</li>
+            </ul>
+        </li>
+
+        <li class="category" data-category="proceso">
+           Proceso
+           <ul class="projects">
+               <li class="project">Proceso 1</li>
+               <li class="project">Proceso 2</li>
+               <li class="project">Proceso 3</li>
+           </ul>
+       </li>
+
+       <li class="category" data-category="contacto">
+           Contacto
+           <ul class="projects">
+               <li class="project">Mail/ covisaraul98@gmail.com</li>
+               <li class="project">Instagram/ @rcovisa</li>  
+           </ul>
+       </li>
+    </ul>
+
+    <!-- Sección de votación -->
+    <div class="vote-section">
+        <h2>¿Te gusta esta web?</h2>
+        <button id="likeButton">Sí</button>
+        <button id="dislikeButton">No</button>
+        <p id="voteCount"></p>
+    </div>
+
+    <script>
+        const colors = {
+          grafico: "#fe3d14", // Color para Diseño Gráfico
+          web: "#14c98d",     // Color para Diseño Web
+          proceso: "#ff316c", // Color para Proceso
+          contacto: "#f5c100" // Color para Contacto
+        };
+
+        // Inicializar contador de visitas
+        let visitCount = getCookie("visitCount") || 0;
+
+        // Mostrar contador de visitas
+        document.getElementById("voteCount").innerText = `Número de visitantes únicos hasta ahora: ${visitCount}`;
+
+        // Función para obtener cookie
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+          return null;
+        }
+
+        // Función para establecer cookie
+        function setCookie(name, value, days) {
+          const date = new Date();
+          date.setTime(date.getTime() + (days*24*60*60*1000));
+          const expires = "expires="+ date.toUTCString();
+          document.cookie = `${name}=${value}; ${expires}; path=/`;
+        }
+
+        // Incrementar contador de visitas y establecer cookie
+        visitCount++;
+        setCookie("visitCount", visitCount, 30); // Guarda por 30 días
+
+        document.querySelectorAll('.category').forEach(category => {
+          category.addEventListener('click', () => {
+              const projects = category.querySelector('.projects');
+              const isExpanded = projects.style.maxHeight;
+
+              if (!isExpanded) {
+                  projects.style.maxHeight = projects.scrollHeight + "px"; // Expande el contenedor
+                  gsap.to(projects.querySelectorAll('.project'), {
+                      opacity: 1,
+                      x: 0,
+                      duration: 0.5,
+                      stagger: 0.1 // Animación en cascada
+                  });
+
+                  // Cambiar el color de fondo según la categoría seleccionada
+                  document.body.style.backgroundColor = colors[category.dataset.category];
+              } else {
+                  projects.style.maxHeight = null; // Colapsa el contenedor
+                  gsap.to(projects.querySelectorAll('.project'), {
+                      opacity: 0,
+                      x: -20,
+                      duration: 0.3 // Animación al colapsar
+                  });
+
+                  // Restablecer el color de fondo a negro si se colapsa
+                  document.body.style.backgroundColor = "#0a0a0a"; 
+              }
+          });
+      });
+
+      gsap.from("h1, h2", {
+          opacity: 0,
+          y: 50,
+          duration: 1,
+          ease: "power3.out",
+          stagger: 0.2
+      });
+
+      gsap.from(".category", {
+          opacity: 0,
+          x: -50,
+          duration: 1,
+          ease: "power3.out",
+          stagger: 0.2,
+          delay: 0.5
+      });
+
+      // Funciones para manejar los votos
+      document.getElementById("likeButton").addEventListener("click", function() {
+          alert("¡Gracias por tu voto positivo!");
+      });
+
+      document.getElementById("dislikeButton").addEventListener("click", function() {
+          alert("Gracias por tu feedback.");
+      });
+    </script>
+
+</body>
+
+
+</html>
