@@ -78,11 +78,53 @@
         button:hover {
             background-color: #45a049; /* Color más oscuro al pasar el mouse sobre el botón */
         }
+
+        .circular-text {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            }
+
+            .circular-text svg {
+            fill: currentColor;
+            height: auto;
+            max-width: 100%;
+            transform-origin: center;
+            width: 100%;
+            }
+
+            .circular-text path {
+            fill: none;
+            }
+
+            .circular-text text {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            }
+
     </style>
+
 </head>
 <body>
     <h1>Raul Covisa</h1>
     <h2>Diseñador Gráfico/Web</h2>
+
+    <div class="circular-text" id="rotatingText">
+        <svg viewBox="0 0 100 100" width="100" height="100">
+          <path id="circle" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" />
+          <text>
+            <textPath href="#circle">
+              RCOVISA • RCOVISA • RCOVISA •
+            </textPath>
+          </text>
+        </svg>
+      </div>
+
+
     <ul class="portfolio-categories">
         <li class="category" data-category="grafico">
             Diseño Gráfico
@@ -91,7 +133,7 @@
                     <a href="./proyecto1.html">Branding para CaféAroma</a>
                 </li>
                 <li class="project">
-                    <a href="https://www.tu-proyecto.com">Branding para Uniqlo</a>
+                    <a href="./fotos.html">Diseños Personales</a>
                 </li>
                 <li class="project">
                     <a href="https://www.tu-proyecto.com">Branding Vicio</a>
@@ -135,11 +177,22 @@
     </div>
 
     <script>
+
+            const rotatingText = document.getElementById('rotatingText');
+
+            function rotateText() {
+            rotatingText.style.transform = `rotate(${performance.now() / 50}deg)`;
+            requestAnimationFrame(rotateText);
+            }
+
+            rotateText();
+
+
         const colors = {
           grafico: "#fe3d14", // Color para Diseño Gráfico
           web: "#14c98d",     // Color para Diseño Web
           proceso: "#ff316c", // Color para Proceso
-          contacto: "#f5c100" // Color para Contacto
+          contacto: "#f4aa00" // Color para Contacto
         };
 
         // Inicializar contador de visitas
@@ -215,14 +268,33 @@
           delay: 0.5
       });
 
-      // Funciones para manejar los votos
-      document.getElementById("likeButton").addEventListener("click", function() {
-          alert("¡Gracias por tu voto positivo!");
-      });
+  // Inicializar contadores de votos
+let likesCount = localStorage.getItem('likesCount') || 0;
+let dislikesCount = localStorage.getItem('dislikesCount') || 0;
 
-      document.getElementById("dislikeButton").addEventListener("click", function() {
-          alert("Gracias por tu feedback.");
-      });
+// Modificar los botones de like y dislike
+document.getElementById("likeButton").addEventListener("click", function() {
+    likesCount++;
+    localStorage.setItem('likesCount', likesCount);
+    updateVoteDisplay();
+    alert(`¡Gracias por tu voto positivo! Total de likes: ${likesCount}`);
+});
+
+document.getElementById("dislikeButton").addEventListener("click", function() {
+    dislikesCount++;
+    localStorage.setItem('dislikesCount', dislikesCount);
+    updateVoteDisplay();
+    alert(`Gracias por tu feedback. Total de dislikes: ${dislikesCount}`);
+});
+
+// Función para actualizar la visualización de votos
+function updateVoteDisplay() {
+    document.getElementById("voteCount").innerText = 
+        `Sí: ${likesCount} / No: ${dislikesCount}`;
+}
+
+// Mostrar los votos al cargar la página
+updateVoteDisplay();
     </script>
 
 </body>
